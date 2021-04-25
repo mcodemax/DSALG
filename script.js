@@ -1,7 +1,7 @@
 //solve the easier problem of finding the 1st zero, then solve the next step of counting them all
 
 function countZeroes(arr){
-    if(findfirstzero(arr)) 
+    if(findfirstzero(arr) !== -1) 
         return arr.length - findfirstzero(arr);
 
     return 0;
@@ -34,11 +34,41 @@ function findfirstzero(arr, first = 0, last = arr.length - 1){
     }
     return -1; //if we never find a zero
 }
-//[1, 0(ind of 1)... length - 1]//
 
-//length is length - index#
-//[1,1,1]
 
-//[0,0,1]
+function sortFrequency(arr, num){
+    //find first index
+    //find 2nd
+    //subtract them and return it.
+    //return -1 if the number not found there
+}
 
-//countZeroes([1,1,1,1,0,0]) // 
+function findFirstTarg(arr, targ, first = 0, last = arr.length - 1){
+    if(first <= last){
+        let mid = Math.floor((first + last)/2);
+     
+        if((mid === 0 || arr[mid - 1] < targ) && arr[mid] === targ ){//cond to return the index targ was found, arr[mid] ===targ must ALWAys be true
+            return mid;
+        }else if(arr[mid] < targ){//ignore left eles
+            return findFirstTarg(arr, targ, mid + 1, last)
+        }else{//(arr[mid] > targ)  //ignore right eles
+            return findFirstTarg(arr, targ, first, mid - 1)
+        }
+    }
+    return -1;
+}
+
+function findlastTarg(arr, targ, first = 0, last = arr.length - 1){
+    if(first <= last){
+        let mid = Math.floor((first + last)/2);
+     
+        if((mid === arr.length - 1 || arr[mid + 1] > targ) && arr[mid] === targ ){//cond to return the index targ was found, arr[mid] ===targ must ALWAys be true
+            return mid;
+        }else if(arr[mid] < targ){//filter out eles to the left
+            return findlastTarg(arr, targ, mid + 1, last)
+        }else{//(arr[mid] > targ)  //ignore right eles
+            return findlastTarg(arr, targ, first, mid - 1)
+        }
+    }
+    return -1;
+}
