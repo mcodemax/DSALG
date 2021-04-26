@@ -98,12 +98,43 @@ function findLast(arr, num, low = 0, high = arr.length - 1) {
     return -1
   }
 
-function findRotatedInde(arr, num){
+function findRotatedIndex(arr, num){ //THE MOST IMPORTANT ONE TO REDO ON YOUR OWN FOR PRACTICE
     //accept rotated arr of sorted #'s,,, and an integer
     //o: return index of num in arr
 
-
+    //do 1 traversal for finding pivot index (use binary search)
+            //we can use findRotationCount to find the pivot element
+    //do 2nd traversal for finding target num (use binary search)
+    let pivot = findRotationCount(arr); 
+    console.log(arr, pivot)
+    if(arr[0] <= num && num <= arr[pivot - 1] && pivot > 0)//make sure code accounts for if pivot is at beginning
+    {
+        return findTarget(arr, num, 0, pivot - 1);
+    }else{
+        return findTarget(arr, num, pivot);
+    }
 }
+
+function findTarget(arr, num, first = 0, last = arr.length - 1){//this is ordinary binary search
+    if(arr.length === 0 || num < arr[first] || num > arr[last] ) return -1;
+
+    //pivot ind will = first
+    while(first <= last){
+        let mid = Math.floor((first + last)/2);
+        
+        if(arr[mid] === num){
+            return mid;
+        }else if(arr[mid] > num){
+            last = mid - 1;
+        }else if(arr[mid] < num){
+            first = mid + 1;
+        }
+    
+    }
+    return -1;
+}
+
+
 
 function findRotationCount(arr){//arr has nonrepeating #'s
     //simplified ver: compare values in arr, return an index at the arr's 1st point of rotation it's been rotated
@@ -124,7 +155,7 @@ function findRotationCount(arr){//arr has nonrepeating #'s
 
         //case 2 (arr[mid] < arr[mid + 1] && arr[mid] < arr[mid - 1])
         if(arr[mid] <= arr[nextind] && arr[mid] <= arr[prevind]){
-            console.log(prevind, nextind, mid)
+            
             return mid;
         }//case 3, if mid of array is bigger than first
         else if(arr[mid] >= arr[first]){//arr's vals are distinct; there will be no repeat #'s so no need for <= or >=
@@ -139,6 +170,31 @@ function findRotationCount(arr){//arr has nonrepeating #'s
     return -1;
 }
 
-console.log(findRotationCount([15, 18, 2, 3, 6, 12])); // 2
-console.log(findRotationCount([7, 9, 11, 12, 5])); // 4, infinite loop or something without <= and >=
-console.log(findRotationCount([7, 9, 11, 12, 15])); // 0, inifinite loop or something without <= and >=
+function findFloor(arr, x, first = 0, last = arr.length - 1){//ask mentor for explanation
+    //o:return largest ele in arr that is <= x
+    if(first > last) return -1; //base case prevents inf loop
+    let mid = Math.floor((first + last)/2);
+
+    if(arr[mid] === x) return arr[mid];//1st base case
+
+    if(x >= arr[last]) return arr[last]; //2nd base case
+    
+    if(mid > 0 && arr[mid - 1] < x && x < arr[mid]){// x < arr[mid] b/c we got to this pt in the algo and we want to select the biggest element <= x
+        return arr[mid - 1];
+    }
+    
+    if(x < arr[mid]){
+        return findFloor(arr, x, 0, mid - 1); //recursive for one subtree
+    }
+
+    return findFloor(arr, x, mid + 1) //recursive call for other subtree
+}
+
+// how to solve theee: https://www.youtube.com/watch?v=s2Yyk3qdy3o
+
+//get base cases (including ones so you don't get an inf loop)
+//do recursion on left or right subtrees.
+
+console.log(findFloor([1,2,8,10,10,12,19], 9)) // 8
+console.log(findFloor([1,2,8,10,10,12,19], 20)) // 19
+console.log(findFloor([1,2,8,10,10,12,19], 0)) // -1
