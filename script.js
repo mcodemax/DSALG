@@ -75,7 +75,7 @@ function findlastTarg(arr, targ, first = 0, last = arr.length - 1){
         }else{//(arr[mid] >= targ && not at the end of the arr)  //ignore left eles
             //if arr[mid] is too big, make last = mid - 1
             return findlastTarg(arr, targ, first, mid - 1)
-        }// problem is hard pay attn to how all if's relate to each other when solving
+        }// problem is hard, pay attn to how all if's relate to each other when solving
     }
     return -1;
 }
@@ -120,23 +120,25 @@ function findRotationCount(arr){//arr has nonrepeating #'s
             return first;
         }
 
+        //below <= and >= needed to prevent infinite loops
+
         //case 2 (arr[mid] < arr[mid + 1] && arr[mid] < arr[mid - 1])
-        if(arr[mid] < arr[nextind] && arr[mid] < arr[prevind]){
+        if(arr[mid] <= arr[nextind] && arr[mid] <= arr[prevind]){
             console.log(prevind, nextind, mid)
             return mid;
         }//case 3, if mid of array is bigger than first
-        else if(arr[mid] > arr[first]){//arr's vals are distinct; there will be no repeat #'s so no need for <= or >=
+        else if(arr[mid] >= arr[first]){//arr's vals are distinct; there will be no repeat #'s so no need for <= or >=
             //arr[mid] > arr[first]    if mid ele is bigger than first ele in this statement then the pivot element(rotation pt) can't exist there b/c its already sorted; kill the left side
             first = mid + 1;
-        }else if(arr[mid] < arr[last]){//case 4 if mid of arr is 
+        }else if(arr[mid] <= arr[last]){//case 4 if mid of arr is 
             last = mid - 1; //if arr[mid] < arr[last], right half already sorted, pivot pt not there; kill right side
         }
 
-            //[5,6,7,8,9,1,2,3,4]
+            //[5,6,7,8,9,1,2,3,4] e.g. arr
     }
     return -1;
 }
 
 console.log(findRotationCount([15, 18, 2, 3, 6, 12])); // 2
-console.log(findRotationCount([7, 9, 11, 12, 5])); // 4
-console.log(findRotationCount([7, 9, 11, 12, 15])); // 0
+console.log(findRotationCount([7, 9, 11, 12, 5])); // 4, infinite loop or something without <= and >=
+console.log(findRotationCount([7, 9, 11, 12, 15])); // 0, inifinite loop or something without <= and >=
